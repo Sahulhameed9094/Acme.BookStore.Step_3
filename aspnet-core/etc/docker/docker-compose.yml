@@ -1,0 +1,80 @@
+version: '3.8'
+
+services:
+  step_3-angular:
+    image: acme.bookstore/step_3-angular:latest
+    container_name: step_3-angular
+    build:
+      context: ../../../
+      dockerfile: angular/Dockerfile.local
+    ports:
+      - "4200:80"
+    depends_on:
+      - step_3-api
+    volumes:
+      - ./dynamic-env.json://usr/share/nginx/html/dynamic-env.json
+    networks:
+      - abp-network
+
+  step_3-api:
+    image: acme.bookstore/step_3-api:latest
+    container_name: step_3-api
+    hostname: step_3-api
+    build:
+      context: ../../
+      dockerfile: src/Acme.BookStore.Step_3.HttpApi.Host/Dockerfile.local
+    environment:
+      - ASPNETCORE_URLS=https://+:443;http://+:80;
+      - Kestrel__Certificates__Default__Path=/root/certificate/localhost.pfx
+      - Kestrel__Certificates__Default__Password=00000000-0000-0000-0000-000000000000
+      - App__SelfUrl=https://localhost:44354
+      - App__AngularUrl=http://localhost:4200
+      - App_CorsOrigins=http://localhost:4200
+      - App__HealthCheckUrl=http://step_3-api/health-status
+      - AuthServer__RequireHttpsMetadata=false
+      - AuthServer__Authority=https://localhost:44354
+      - App__RedirectAllowedUrls=http://localhost:4200
+      - Redis__Configuration=redis
+    ports:
+      - "44354:443"
+    depends_on:
+      redis:
+        condition: service_healthy  
+    restart: on-failure    
+    volumes:
+      - ./certs:/root/certificate
+    networks:
+      - abp-network
+  
+
+  db-migrator:
+    image: acme.bookstore/step_3-db-migrator:latest
+    container_name: db-migrator
+    build:
+      context: ../../
+      dockerfile: src/Step_3.DbMigrator/Dockerfile.local
+    environment:
+      - OpenIddict__Applications__Step_3_App__RootUrl=http://localhost:4200
+      - OpenIddict__Applications__Step_3_Swagger__RootUrl=https://localhost:44354
+      - Redis__Configuration=redis
+    restart: on-failure
+    depends_on:
+    networks:
+      - abp-network    
+  
+  
+  redis:
+    container_name: redis
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - abp-network  
+    healthcheck:
+      test: ["CMD", "redis-cli","ping"]      
+
+volumes:
+networks:
+  abp-network:
+    name: step_3-network
+    driver: bridge
