@@ -17,6 +17,8 @@ using Volo.Saas.Editions;
 using Volo.Saas.Tenants;
 using Volo.Abp.Gdpr;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
+using System.Data;
+using Acme.BookStore.Step_3.Entity;
 
 namespace Acme.BookStore.Step_3.EntityFrameworkCore;
 
@@ -64,6 +66,10 @@ public class Step_3DbContext :
     {
 
     }
+
+    public DbSet<Product> Products { get; set; }
+
+    public DbSet<Order> Orders { get; set; }    
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

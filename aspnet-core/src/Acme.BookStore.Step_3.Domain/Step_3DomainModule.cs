@@ -21,6 +21,7 @@ using Volo.Abp.Commercial.SuiteTemplates;
 using Volo.Abp.Gdpr;
 using Volo.Abp.OpenIddict;
 using Volo.Abp.PermissionManagement.OpenIddict;
+using Volo.Abp.Data;
 
 namespace Acme.BookStore.Step_3;
 
@@ -51,6 +52,17 @@ public class Step_3DomainModule : AbpModule
         {
             options.IsEnabled = MultiTenancyConsts.IsEnabled;
         });
+
+
+
+        //Configure<AbpDbConnectionOptions>(options =>
+        //{
+        //    options.Databases.Configure("Saas", database =>
+        //    {
+        //        database.IsUsedByTenants = true;
+        //    });
+        //});
+
 
         Configure<AbpLocalizationOptions>(options =>
         {

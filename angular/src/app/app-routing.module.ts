@@ -1,6 +1,7 @@
 import { authGuard, permissionGuard } from '@abp/ng.core';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { identityEntityActionContributors } from './entity-action-contributors';
 
 const routes: Routes = [
   {
@@ -24,7 +25,12 @@ const routes: Routes = [
   },
   {
     path: 'identity',
-    loadChildren: () => import('@volo/abp.ng.identity').then(m => m.IdentityModule.forLazy()),
+    loadChildren: () =>
+      import('@volo/abp.ng.identity').then(m =>
+        m.IdentityModule.forLazy({
+          entityActionContributors: identityEntityActionContributors,
+        })
+      ),
   },
   {
     path: 'language-management',
