@@ -48,6 +48,7 @@ public class Step_3DomainModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        //https://docs.abp.io/en/abp/latest/Multi-Tenancy#abpmultitenancyoptions-enable-disable-multi-tenancy
         Configure<AbpMultiTenancyOptions>(options =>
         {
             options.IsEnabled = MultiTenancyConsts.IsEnabled;

@@ -1,4 +1,5 @@
-﻿using Acme.BookStore.Step_3.Entity;
+﻿using Acme.BookStore.Step_3.Dto;
+using Acme.BookStore.Step_3.Entity;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -43,12 +44,5 @@ namespace Acme.BookStore.Step_3.ProdcutAppservice
         }
 
 
-    }
-
-    public class CreateProductDto
-    {
-        public string? Name { get; set; }
-
-        public float Price { get; set; }
     }
 }

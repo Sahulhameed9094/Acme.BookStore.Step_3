@@ -69,7 +69,10 @@ public class Step_3DbContext :
 
     public DbSet<Product> Products { get; set; }
 
-    public DbSet<Order> Orders { get; set; }    
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<Patient> patients { get; set; }
+    public DbSet<Doctor> doctors { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
